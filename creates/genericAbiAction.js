@@ -2,7 +2,6 @@ const NexusClient = require("grindery-nexus-client").default;
 
 const ENVIRONMENT = process.env.ENVIRONMENT;
 
-// triggers on a new trigger_from_a_grindery_workflow with a certain tag
 const perform = async (z, bundle) => {
   const client = new NexusClient();
   client.authenticate(`${bundle.authData.access_token}`);

@@ -1,4 +1,3 @@
-//const abiTrigger = require("./triggers/abi");
 const genericAbiAction = require("./creates/genericAbiAction");
 const {
   config: authentication,

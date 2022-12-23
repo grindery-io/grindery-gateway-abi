@@ -2,7 +2,6 @@ const NexusClient = require("grindery-nexus-client").default;
 
 const ENVIRONMENT = process.env.ENVIRONMENT;
 
-// triggers on a new list_driver_triggers with a certain tag
 const perform = async (z, bundle) => {
   const client = new NexusClient();
   try {
