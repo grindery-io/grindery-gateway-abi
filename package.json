@@ -2,7 +2,7 @@
   "name": "zapier-abi-app",
   "version": "1.0.0",
   "description": "Grindery EVM ABI",
-  "repository": "milukove/zapier-abi-app",
+  "repository": "grindery-io/zapier-abi-app",
   "homepage": "https://www.grindery.io/",
   "author": "Egor Miliukov <milukove@gmail.com>",
   "license": "BSD-3-Clause",
