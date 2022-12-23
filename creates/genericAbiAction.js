@@ -4,7 +4,12 @@ const ENVIRONMENT = process.env.ENVIRONMENT;
 
 const perform = async (z, bundle) => {
   const client = new NexusClient();
-  client.authenticate(`${bundle.authData.access_token}`);
+
+  try {
+    client.authenticate(`${bundle.authData.access_token}`);
+  } catch (error) {
+    throw new z.errors.Error(error.message);
+  }
   const step = {
     type: "action",
     connector: "evmGenericAbi",
@@ -19,6 +24,7 @@ const perform = async (z, bundle) => {
       throw new z.errors.RefreshAuthError();
     } else {
       z.console.log("perform genericAbiAction error", error);
+      throw new z.errors.Error(error.message);
     }
   }
   z.console.log("Response from runAction (genericAbiAction): ", nexus_response);
