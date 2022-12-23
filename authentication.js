@@ -63,8 +63,14 @@ const testAuth = (z, bundle) => {
     client.authenticate(`${bundle.authData.access_token}`);
 
     const promise = z.request({
-      method: "GET",
-      url: "https://connex-zapier-grindery.herokuapp.com/me",
+      method: "POST",
+      url: "https://orchestrator.grindery.org",
+      json: {
+        jsonrpc: "2.0",
+        method: "or_listWorkflows",
+        id: new Date(),
+        params: {},
+      },
       headers: {
         Authorization: `Bearer ${bundle.authData.access_token}`,
         accept: "application/json",
@@ -75,9 +81,16 @@ const testAuth = (z, bundle) => {
     // Raise an error to show
     return promise.then((response) => {
       if (response.status === 401) {
-        throw new Error("The access token you supplied is not valid");
+        throw new z.errors.RefreshAuthError();
       }
-      return z.JSON.parse(response.content);
+      const decodedtoken = jwt_decode(bundle.authData.access_token);
+      const userId = decodedtoken.sub;
+      const walletAddress = userId.split(":")[2];
+      const userWallet =
+        walletAddress.substring(0, 6) +
+        "..." +
+        walletAddress.substring(walletAddress.length - 4);
+      return { id: userWallet };
     });
   } catch (error) {
     if (error.message === "Invalid access token") {
