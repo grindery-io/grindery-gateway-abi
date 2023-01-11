@@ -50,6 +50,15 @@ module.exports = {
     // `inputFields` defines the fields a user could provide
     // Zapier will pass them in as `bundle.inputData` later. They're optional.
     inputFields: [
+      {
+        key: "_grinderyChain",
+        type: "string",
+        label: "Blockchain",
+        placeholder: "Select a blockchain",
+        required: true,
+        altersDynamicFields: true,
+        dynamic: "list_chains_trigger.key",
+      },
       async function (z, bundle) {
         const client = new NexusClient();
         client.authenticate(`${bundle.authData.access_token}`);
@@ -85,25 +94,65 @@ module.exports = {
           return rv;
         }
 
-        return (
+        const fields =
           (res &&
             res.inputFields &&
-            res.inputFields.map((field) => ({
-              key: field.key,
-              label: field.label || field.key || "",
-              type: "string",
-              required: field.required,
-              choices: (field.choices && toObject(field.choices)) || undefined,
-              default: field.default || undefined,
-              altersDynamicFields: true,
-              dynamic:
-                (field.key &&
-                  field.key === "_grinderyChain" &&
-                  "list_chains_trigger.key") ||
-                undefined,
-            }))) ||
-          []
-        );
+            res.inputFields
+              .filter(
+                (field) => field && field.key && field.key !== "_grinderyChain"
+              )
+              .map((field) => {
+                let input = {
+                  key: field.key,
+                  label: field.label || field.key || "",
+                };
+                let type = "";
+                switch (field.type) {
+                  case "boolean":
+                    type = "boolean";
+                    break;
+                  case "text":
+                    type = "text";
+                    break;
+                  case "file":
+                    type = "file";
+                    break;
+                  case "password":
+                    type = "password";
+                    break;
+                  case "integer":
+                    type = "integer";
+                    break;
+                  case "number":
+                    type = "number";
+                    break;
+                  case "datetime":
+                    type = "datetime";
+                    break;
+                  default:
+                    type = "string";
+                }
+                input.type = type;
+                if (field.required) {
+                  input.required = true;
+                }
+                if (field.choices) {
+                  input.choices = toObject(field.choices);
+                }
+                if (field.default) {
+                  if (type === "boolean") {
+                    if (field.default === "true") {
+                      input.default = field.default;
+                    }
+                  } else {
+                    input.default = field.default;
+                  }
+                }
+                input.altersDynamicFields = true;
+                return input;
+              })) ||
+          [];
+        return fields;
       },
     ],
 
