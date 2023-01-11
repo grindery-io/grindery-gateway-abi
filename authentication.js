@@ -55,7 +55,7 @@ const refreshAccessToken = (z, bundle) => {
   });
 };
 
-const testAuth = (z, bundle) => {
+/*const testAuth = (z, bundle) => {
   // Normally you want to make a request to an endpoint that is either specifically designed to test auth, or one that
   // every user will have access to, such as an account or profile endpoint like /me.
   const client = new NexusClient();
@@ -91,6 +91,38 @@ const testAuth = (z, bundle) => {
         "..." +
         walletAddress.substring(walletAddress.length - 4);
       return { id: userWallet };
+    });
+  } catch (error) {
+    if (error.message === "Invalid access token") {
+      throw new z.errors.RefreshAuthError();
+    }
+  }
+};*/
+
+// Copied from Connex
+const testAuth = (z, bundle) => {
+  // Normally you want to make a request to an endpoint that is either specifically designed to test auth, or one that
+  // every user will have access to, such as an account or profile endpoint like /me.
+  const client = new NexusClient();
+  try {
+    client.authenticate(`${bundle.authData.access_token}`);
+
+    const promise = z.request({
+      method: "GET",
+      url: "https://connex-zapier-grindery.herokuapp.com/me",
+      headers: {
+        Authorization: `Bearer ${bundle.authData.access_token}`,
+        accept: "application/json",
+      },
+    });
+
+    // This method can return any truthy value to indicate the credentials are valid.
+    // Raise an error to show
+    return promise.then((response) => {
+      if (response.status === 401) {
+        throw new Error("The access token you supplied is not valid");
+      }
+      return z.JSON.parse(response.content);
     });
   } catch (error) {
     if (error.message === "Invalid access token") {
