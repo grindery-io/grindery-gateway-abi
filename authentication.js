@@ -1,6 +1,5 @@
 "use strict";
 const NexusClient = require("grindery-nexus-client").default;
-const jwt_decode = require("jwt-decode");
 
 const getAccessToken = (z, bundle) => {
   const promise = z.request("https://orchestrator.grindery.org/oauth/token", {
@@ -54,50 +53,6 @@ const refreshAccessToken = (z, bundle) => {
     };
   });
 };
-
-/*const testAuth = (z, bundle) => {
-  // Normally you want to make a request to an endpoint that is either specifically designed to test auth, or one that
-  // every user will have access to, such as an account or profile endpoint like /me.
-  const client = new NexusClient();
-  try {
-    client.authenticate(`${bundle.authData.access_token}`);
-
-    const promise = z.request({
-      method: "POST",
-      url: "https://orchestrator.grindery.org",
-      json: {
-        jsonrpc: "2.0",
-        method: "or_listWorkflows",
-        id: new Date(),
-        params: {},
-      },
-      headers: {
-        Authorization: `Bearer ${bundle.authData.access_token}`,
-        accept: "application/json",
-      },
-    });
-
-    // This method can return any truthy value to indicate the credentials are valid.
-    // Raise an error to show
-    return promise.then((response) => {
-      if (response.status === 401) {
-        throw new z.errors.RefreshAuthError();
-      }
-      const decodedtoken = jwt_decode(bundle.authData.access_token);
-      const userId = decodedtoken.sub;
-      const walletAddress = userId.split(":")[2];
-      const userWallet =
-        walletAddress.substring(0, 6) +
-        "..." +
-        walletAddress.substring(walletAddress.length - 4);
-      return { id: userWallet };
-    });
-  } catch (error) {
-    if (error.message === "Invalid access token") {
-      throw new z.errors.RefreshAuthError();
-    }
-  }
-};*/
 
 // Copied from Connex
 const testAuth = (z, bundle) => {
