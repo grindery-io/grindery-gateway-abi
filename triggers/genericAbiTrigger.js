@@ -1,6 +1,5 @@
 const NexusClient = require("grindery-nexus-client").default;
 const {
-  getSamples,
   getCreatorId,
   uniqueID,
   getOutputFields,
