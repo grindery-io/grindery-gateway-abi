@@ -1,15 +1,11 @@
 const NexusClient = require("grindery-nexus-client").default;
-const { getSamples, getCreatorId } = require("../utils");
-
-//uniqueID Generate Token ID
-function uniqueID() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4();
-}
+const {
+  getSamples,
+  getCreatorId,
+  uniqueID,
+  getOutputFields,
+  getInputFields,
+} = require("../utils");
 
 // triggers on a new genericAbiTrigger with a certain tag
 const perform = async (z, bundle) => {
@@ -21,12 +17,19 @@ const perform = async (z, bundle) => {
 
 //This method retrieves sample documents from Grindery Drivers
 const performTransactionList = async (z, bundle) => {
-  const data = await getSamples();
+  const data = await getOutputFields(z, bundle, "genericAbiTrigger");
 
-  if (Object.keys(data.items).length === 0) {
+  if (data.length === 0) {
     return [];
   } else {
-    return data.items;
+    let obj = {};
+    data.map((field) => {
+      obj = {
+        ...obj,
+        [field.label]: "",
+      };
+    });
+    return [obj];
   }
 };
 
@@ -42,132 +45,92 @@ const subscribeHook = async (z, bundle) => {
     },
   };
 
-  // show the ui based on driver and trigger selected.
+  // create nexus workflow with zapier action
   return z.request(options).then(async (response) => {
-    //create workflow, with zapier action at the end with token
-    let input = {}; //trigger input object
-    let output = {}; //output object from trigger
-    let trigger = {}; //trigger object
-    let creator = getCreatorId(bundle.authData.access_token); //find the creator id from the access_token
-    //z.console.log("Creator Returned", creator);
-    let action = {}; //action after creating trigger
-    let workflow = {}; //main workflow object
+    // create workflow
     try {
       const client = new NexusClient();
+      client.authenticate(`${bundle.authData.access_token}`);
 
-      let thisDriver = await client.getDriver(bundle.inputData.driver_id); //
-      let driver_triggers = thisDriver.triggers;
-      z.console.log("Selected Driver ", driver_triggers);
+      const outputFields = await getOutputFields(
+        z,
+        bundle,
+        "genericAbiTrigger"
+      );
 
-      if (driver_triggers) {
-        //get the selected action
-        let this_selected_trigger = driver_triggers.filter(
-          (trigger) => trigger.key === bundle.inputData.trigger_id
+      // trigger input object
+      let input = {
+        ...bundle.inputData,
+      };
+
+      // output object from trigger
+      let output = {};
+
+      outputFields.map((outField) => {
+        output = {
+          ...output,
+          [outField.key]: `{{trigger.${[outField.key]}}}`,
+        };
+      });
+
+      // trigger object
+      let trigger = {
+        type: "trigger",
+        connector: "evmGenericAbi",
+        operation: "genericAbiTrigger",
+        input: input,
+      };
+
+      // find the creator id from the access_token
+      let creator = getCreatorId(bundle.authData.access_token);
+
+      // action after creating trigger
+      let action = [
+        {
+          type: "action",
+          connector: "zapier",
+          operation: "triggerZap",
+          input: {
+            token: token,
+            data: JSON.stringify(output),
+          },
+        },
+      ];
+
+      // main workflow object
+      let workflow = {
+        state: "on",
+        title: `Trigger a Zap ${token}`,
+        creator: creator,
+        actions: action,
+        trigger: trigger,
+      };
+
+      const create_workflow_response = await client.createWorkflow(workflow);
+      const data = await z.JSON.parse(response.content);
+      const response_object = {
+        workflow_key: create_workflow_response.key,
+        ...data,
+      };
+
+      // save workflow
+      const save_options = {
+        url: `https://connex-zapier-grindery.herokuapp.com/saveWorkflow`,
+        method: "POST",
+        body: {
+          id: data.id,
+          workflow: workflow,
+        },
+      };
+
+      return z.request(save_options).then(async (response) => {
+        z.console.log("saving workflow response: ", response);
+        z.console.log(
+          "Returned Object from Subscribe Action: ",
+          response_object
         );
-        if (this_selected_trigger.length >= 1) {
-          let this_trigger = this_selected_trigger[0];
-          let allChoices = [];
-          z.console.log("Trigger Object: ", trigger);
-          if (this_trigger.operation.inputFields.length >= 1) {
-            this_trigger.operation.inputFields.map((inputField) => {
-              z.console.log("Trigger Input Field: ", inputField);
-              if (inputField.choices) {
-                inputField.choices.map((choice) => {
-                  allChoices.push(choice.value);
-                });
-              }
-              if (inputField.computed === true) {
-                input = {
-                  [inputField.key]: inputField.default,
-                  ...input,
-                };
-              } else {
-                if (bundle.inputData[inputField.key] === "all") {
-                  input = {
-                    [inputField.key]: allChoices,
-                    ...input,
-                  };
-                } else {
-                  input = {
-                    [inputField.key]: bundle.inputData[inputField.key],
-                    ...input,
-                  };
-                }
-              }
-            });
-          }
-          if (this_trigger.operation.outputFields.length >= 1) {
-            this_trigger.operation.outputFields.map((outField) => {
-              output = {
-                [outField.key]: `{{trigger.${[outField.key]}}}`,
-                ...output,
-              };
-            });
-          }
-          z.console.log("Selected Trigger ", this_trigger);
-          trigger = {
-            type: "trigger",
-            connector: bundle.inputData.driver_id,
-            operation: bundle.inputData.trigger_id,
-            input: input,
-          };
-          z.console.log("Input Object: ", input);
-          action = [
-            {
-              type: "action",
-              connector: "zapier",
-              operation: "triggerZap",
-              input: {
-                token: token,
-                data: JSON.stringify(output),
-              },
-            },
-          ];
-          z.console.log("Action Object: ", action);
-
-          workflow = {
-            state: "on",
-            title: `Trigger a Zap ${token}`,
-            creator: creator,
-            actions: action,
-            trigger: trigger,
-          };
-
-          //z.console.log("Workflow Object: ", workflow);
-
-          client.authenticate(`${bundle.authData.access_token}`);
-          //z.console.log("Attempting to create this workflow: ", workflow);
-          const create_workflow_response = await client.createWorkflow(
-            workflow
-          );
-          const data = await z.JSON.parse(response.content);
-
-          //TODO: handle possible errors
-          const response_object = {
-            workflow_key: create_workflow_response.key,
-            ...data,
-          };
-
-          //save workflow for later
-          const save_options = {
-            url: `https://connex-zapier-grindery.herokuapp.com/saveWorkflow`,
-            method: "POST",
-            body: {
-              id: data.id,
-              workflow: workflow,
-            },
-          };
-
-          return z.request(save_options).then(async (response) => {
-            z.console.log("saving workflow response: ", response);
-            z.console.log(
-              "Returned Object from Subscribe Action: ",
-              response_object
-            );
-            return response_object;
-          });
-        }
-      }
+        return response_object;
+      });
     } catch (error) {
       if (error.message === "Invalid access token") {
         z.console.log(
@@ -212,10 +175,10 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTrigger",
-  noun: "Listen For Smart-Contract Event",
+  noun: "Smart-Contract Event",
 
   display: {
-    label: "Listen For Smart-Contract Event",
+    label: "Smart-Contract Event",
     description: "Triggers when smart-contract event detected",
   },
 
@@ -229,123 +192,23 @@ module.exports = {
     // Zapier will pass them in as `bundle.inputData` later. They're optional.
     inputFields: [
       {
-        key: "driver_id",
-        label: "Grindery Driver",
+        key: "_grinderyChain",
         type: "string",
+        label: "Blockchain",
+        placeholder: "Select a blockchain",
         required: true,
         altersDynamicFields: true,
-        dynamic: "list_drivers_with_triggers.key",
+        dynamic: "list_chains_trigger.key",
       },
-      {
-        key: "trigger_id",
-        label: "Driver Trigger",
-        type: "string",
-        required: true,
-        altersDynamicFields: true,
-        dynamic: "list_driver_triggers.key",
-      },
-      async function (z, bundle) {
-        const client = new NexusClient();
-        try {
-          let response = await client.getDriver(bundle.inputData.driver_id);
-          z.console.log("Driver Response: ", response);
-          let driver_triggers = response.triggers;
-          let choices = {};
-          let triggersInputField = [];
-          if (driver_triggers) {
-            let this_selected_trigger = driver_triggers.filter(
-              (trigger) => trigger.key === bundle.inputData.trigger_id
-            );
-            if (this_selected_trigger.length >= 0) {
-              z.console.log("Selected Driver: ", this_selected_trigger[0]);
-              //filter computed:true
-              filtered_trigger_input_fields =
-                this_selected_trigger[0].operation.inputFields.filter(
-                  (field) => !field.computed
-                );
-              if (filtered_trigger_input_fields) {
-                filtered_trigger_input_fields.map((inputField) => {
-                  z.console.log("Building Input Field: ", inputField);
-                  let type = "";
-                  switch (inputField.type) {
-                    case "boolean":
-                      type = "boolean";
-                    case "text":
-                      type = "text";
-                    case "file":
-                      type = "file";
-                    case "password":
-                      type = "password";
-                    case "integer":
-                      type = "integer";
-                    case "number":
-                      type = "number";
-                    case "datetime":
-                      type = "datetime";
-                    case "string":
-                    default:
-                      type = "string";
-                  }
-                  let temp = {
-                    key: inputField.key,
-                    label: inputField.label,
-                    helpText: inputField.helpText,
-                    default: inputField.default,
-                    type: type,
-                  };
-                  if (inputField.choices) {
-                    let allChoices = [];
-                    inputField.choices.map((choice) => {
-                      allChoices.push(`"${[choice.value]}"`);
-                      choices = {
-                        [choice.value]: choice.label,
-                        ...choices,
-                      };
-                    });
-                    //inject all available blockchains into choices
-                    choices = {
-                      //[`[${allChoices}]`] : "All Supported Chains",
-                      all: "All Supported Chains",
-                      ...choices,
-                    };
-                    temp = {
-                      choices: choices,
-                      ...temp,
-                    };
-                  }
-                  if (inputField.required) {
-                    temp = {
-                      required: true,
-                      ...temp,
-                    };
-                  }
-                  triggersInputField.push(temp);
-                });
-              }
-              return triggersInputField;
-            }
-          } else {
-            return {};
-          }
-        } catch (error) {
-          z.console.log(
-            "Auth Error in Trigger Grindery Workdlow (trigger_grindery_workflow.js)",
-            error.message
-          );
-          if (error.message === "Invalid access token") {
-            throw new z.errors.RefreshAuthError();
-          }
-        }
+      async (z, bundle) => {
+        return await getInputFields(z, bundle, "genericAbiTrigger");
       },
     ],
 
     // In cases where Zapier needs to show an example record to the user, but we are unable to get a live example
     // from the API, Zapier will fallback to this hard-coded sample. It should reflect the data structure of
     // returned records, and have obvious placeholder values that we can show to any user.
-    sample: {
-      id: 1,
-      test: "sample",
-    },
+    //sample: {},
 
     // If fields are custom to each user (like spreadsheet columns), `outputFields` can create human labels
     // For a more complete example of using dynamic fields see
@@ -355,6 +218,9 @@ module.exports = {
       // these are placeholders to match the example `perform` above
       // {key: 'id', label: 'Person ID'},
       // {key: 'name', label: 'Person Name'}
+      async (z, bundle) => {
+        return await getOutputFields(z, bundle, "genericAbiTrigger");
+      },
     ],
   },
 };

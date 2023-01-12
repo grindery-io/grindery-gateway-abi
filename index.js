@@ -1,4 +1,5 @@
 const genericAbiAction = require("./creates/genericAbiAction");
+const genericAbiTrigger = require("./triggers/genericAbiTrigger");
 const {
   config: authentication,
   befores = [],
@@ -25,6 +26,7 @@ const App = {
   // If you want your trigger to show up, you better include it here!
   triggers: {
     [listChains.key]: listChains,
+    [genericAbiTrigger.key]: genericAbiTrigger,
   },
 
   // If you want your searches to show up, you better include it here!
