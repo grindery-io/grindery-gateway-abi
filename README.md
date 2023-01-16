@@ -24,3 +24,7 @@ zapier push
 ```
 
 Find out more on the latest docs: https://github.com/zapier/zapier-platform/blob/master/packages/cli/README.md.
+
+## License
+
+MIT
