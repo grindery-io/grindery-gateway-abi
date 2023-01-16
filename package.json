@@ -1,11 +1,11 @@
 {
-  "name": "zapier-abi-app",
+  "name": "grindery-gateway-abi",
   "version": "1.0.0",
   "description": "Grindery EVM ABI",
-  "repository": "grindery-io/zapier-abi-app",
+  "repository": "grindery-io/grindery-gateway-abi",
   "homepage": "https://www.grindery.io/",
   "author": "Egor Miliukov <milukove@gmail.com>",
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "jest --testTimeout 10000"
