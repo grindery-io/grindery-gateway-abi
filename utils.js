@@ -60,7 +60,11 @@ module.exports = {
         res.outputFields &&
         res.outputFields.map((field) => ({
           key: field.key,
-          label: field.label || field.key || "",
+          label: (field.label || field.key || "")
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+            .join(" "),
         }))) ||
       []
     );
@@ -110,7 +114,11 @@ module.exports = {
           .map((field) => {
             let input = {
               key: field.key,
-              label: field.label || field.key || "",
+              label: (field.label || field.key || "")
+                .toLowerCase()
+                .split(" ")
+                .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+                .join(" "),
             };
             let type = "";
             switch (field.type) {
