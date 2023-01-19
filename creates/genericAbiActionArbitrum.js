@@ -45,11 +45,11 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiActionArbitrum",
-  noun: "Smart-Contract Function on Arbitrum chain",
+  noun: "Arbitrum",
 
   display: {
-    label: "Smart-Contract Function on Arbitrum chain",
-    description: "Sends transaction to the smart-contract on Arbitrum chain.",
+    label: "Arbitrum",
+    description: "Calls a smart-contract function on the Arbitrum Blockchain",
   },
 
   operation: {

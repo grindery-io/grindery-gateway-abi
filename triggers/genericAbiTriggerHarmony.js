@@ -190,11 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerHarmony",
-  noun: "Smart-Contract Event on Harmony chain",
+  noun: "Harmony",
 
   display: {
-    label: "Smart-Contract Event on Harmony chain",
-    description: "Triggers when smart-contract event detected on Harmony chain",
+    label: "Harmony",
+    description:
+      "Triggers when a smart contract event is detected on the Harmony Blockchain",
   },
 
   operation: {

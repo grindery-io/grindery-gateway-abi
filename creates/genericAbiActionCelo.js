@@ -45,11 +45,11 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiActionCelo",
-  noun: "Smart-Contract Function on Celo chain",
+  noun: "Celo",
 
   display: {
-    label: "Smart-Contract Function on Celo chain",
-    description: "Sends transaction to the smart-contract on Celo chain.",
+    label: "Celo",
+    description: "Calls a smart-contract function on the Celo Blockchain",
   },
 
   operation: {

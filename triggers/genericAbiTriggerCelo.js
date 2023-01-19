@@ -190,11 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerCelo",
-  noun: "Smart-Contract Event on Celo chain",
+  noun: "Celo",
 
   display: {
-    label: "Smart-Contract Event on Celo chain",
-    description: "Triggers when smart-contract event detected on Celo chain",
+    label: "Celo",
+    description:
+      "Triggers when a smart contract event is detected on the Celo Blockchain",
   },
 
   operation: {

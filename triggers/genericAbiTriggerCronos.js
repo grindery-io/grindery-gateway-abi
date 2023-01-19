@@ -190,11 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerCronos",
-  noun: "Smart-Contract Event on Cronos chain",
+  noun: "Cronos",
 
   display: {
-    label: "Smart-Contract Event on Cronos chain",
-    description: "Triggers when smart-contract event detected on Cronos chain",
+    label: "Cronos",
+    description:
+      "Triggers when a smart contract event is detected on the Cronos Blockchain",
   },
 
   operation: {

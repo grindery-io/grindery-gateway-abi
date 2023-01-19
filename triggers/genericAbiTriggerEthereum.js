@@ -190,12 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerEthereum",
-  noun: "Smart-Contract Event on Ethereum chain",
+  noun: "Ethereum",
 
   display: {
-    label: "Smart-Contract Event on Ethereum chain",
+    label: "Ethereum",
     description:
-      "Triggers when smart-contract event detected on Ethereum chain",
+      "Triggers when a smart contract event is detected on the Ethereum Blockchain",
   },
 
   operation: {

@@ -190,11 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerFantom",
-  noun: "Smart-Contract Event on Fantom chain",
+  noun: "Fantom",
 
   display: {
-    label: "Smart-Contract Event on Fantom chain",
-    description: "Triggers when smart-contract event detected on Fantom chain",
+    label: "Fantom",
+    description:
+      "Triggers when a smart contract event is detected on the Fantom Blockchain",
   },
 
   operation: {

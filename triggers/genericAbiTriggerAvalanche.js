@@ -190,12 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerAvalanche",
-  noun: "Smart-Contract Event on Avalanche chain",
+  noun: "Avalanche",
 
   display: {
-    label: "Smart-Contract Event on Avalanche chain",
+    label: "Avalanche",
     description:
-      "Triggers when smart-contract event detected on Avalanche chain",
+      "Triggers when a smart contract event is detected on the Avalanche Blockchain",
   },
 
   operation: {

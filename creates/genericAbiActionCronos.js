@@ -45,11 +45,11 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiActionCronos",
-  noun: "Smart-Contract Function on Cronos chain",
+  noun: "Cronos",
 
   display: {
-    label: "Smart-Contract Function on Cronos chain",
-    description: "Sends transaction to the smart-contract on Cronos chain.",
+    label: "Cronos",
+    description: "Calls a smart-contract function on the Cronos Blockchain",
   },
 
   operation: {

@@ -45,11 +45,11 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiActionBinance",
-  noun: "Smart-Contract Function on Binance chain",
+  noun: "Binance",
 
   display: {
-    label: "Smart-Contract Function on Binance chain",
-    description: "Sends transaction to the smart-contract on Binance chain.",
+    label: "Binance",
+    description: "Calls a smart-contract function on the Binance Blockchain",
   },
 
   operation: {

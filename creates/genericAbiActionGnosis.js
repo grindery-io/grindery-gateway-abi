@@ -45,11 +45,11 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiActionGnosis",
-  noun: "Smart-Contract Function on Gnosis chain",
+  noun: "Gnosis",
 
   display: {
-    label: "Smart-Contract Function on Gnosis chain",
-    description: "Sends transaction to the smart-contract on Gnosis chain.",
+    label: "Gnosis",
+    description: "Calls a smart-contract function on the Gnosis Blockchain",
   },
 
   operation: {

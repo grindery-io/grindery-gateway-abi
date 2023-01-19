@@ -190,11 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerPolygon",
-  noun: "Smart-Contract Event on Polygon chain",
+  noun: "Polygon",
 
   display: {
-    label: "Smart-Contract Event on Polygon chain",
-    description: "Triggers when smart-contract event detected on Polygon chain",
+    label: "Polygon",
+    description:
+      "Triggers when a smart contract event is detected on the Polygon Blockchain",
   },
 
   operation: {

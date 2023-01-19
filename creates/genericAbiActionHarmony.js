@@ -45,11 +45,11 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiActionHarmony",
-  noun: "Smart-Contract Function on Harmony chain",
+  noun: "Harmony",
 
   display: {
-    label: "Smart-Contract Function on Harmony chain",
-    description: "Sends transaction to the smart-contract on Harmony chain.",
+    label: "Harmony",
+    description: "Calls a smart-contract function on the Harmony Blockchain",
   },
 
   operation: {

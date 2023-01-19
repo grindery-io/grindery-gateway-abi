@@ -45,11 +45,11 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiActionPolygon",
-  noun: "Smart-Contract Function on Polygon chain",
+  noun: "Polygon",
 
   display: {
-    label: "Smart-Contract Function on Polygon chain",
-    description: "Sends transaction to the smart-contract on Polygon chain.",
+    label: "Polygon",
+    description: "Calls a smart-contract function on the Polygon Blockchain",
   },
 
   operation: {

@@ -190,12 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerArbitrum",
-  noun: "Smart-Contract Event on Arbitrum chain",
+  noun: "Arbitrum",
 
   display: {
-    label: "Smart-Contract Event on Arbitrum chain",
+    label: "Arbitrum",
     description:
-      "Triggers when smart-contract event detected on Arbitrum chain",
+      "Triggers when a smart contract event is detected on the Arbitrum Blockchain",
   },
 
   operation: {

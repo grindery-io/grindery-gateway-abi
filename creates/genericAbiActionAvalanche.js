@@ -45,11 +45,11 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiActionAvalanche",
-  noun: "Smart-Contract Function on Avalanche chain",
+  noun: "Avalanche",
 
   display: {
-    label: "Smart-Contract Function on Avalanche chain",
-    description: "Sends transaction to the smart-contract on Avalanche chain.",
+    label: "Avalanche",
+    description: "Calls a smart-contract function on the Avalanche Blockchain",
   },
 
   operation: {

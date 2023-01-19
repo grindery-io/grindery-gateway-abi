@@ -190,11 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerGoerli",
-  noun: "Smart-Contract Event on Goerli chain",
+  noun: "Goerli",
 
   display: {
-    label: "Smart-Contract Event on Goerli chain",
-    description: "Triggers when smart-contract event detected on Goerli chain",
+    label: "Goerli",
+    description:
+      "Triggers when a smart contract event is detected on the Goerli Blockchain",
   },
 
   operation: {

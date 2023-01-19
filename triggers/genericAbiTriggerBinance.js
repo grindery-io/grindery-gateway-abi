@@ -190,11 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerBinance",
-  noun: "Smart-Contract Event on Binance chain",
+  noun: "Binance",
 
   display: {
-    label: "Smart-Contract Event on Binance chain",
-    description: "Triggers when smart-contract event detected on Binance chain",
+    label: "Binance",
+    description:
+      "Triggers when a smart contract event is detected on the Binance Blockchain",
   },
 
   operation: {

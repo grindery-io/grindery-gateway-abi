@@ -190,11 +190,12 @@ module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: "genericAbiTriggerGnosis",
-  noun: "Smart-Contract Event on Gnosis chain",
+  noun: "Gnosis",
 
   display: {
-    label: "Smart-Contract Event on Gnosis chain",
-    description: "Triggers when smart-contract event detected on Gnosis chain",
+    label: "Gnosis",
+    description:
+      "Triggers when a smart contract event is detected on the Gnosis Blockchain",
   },
 
   operation: {
