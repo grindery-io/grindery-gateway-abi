@@ -124,12 +124,30 @@ module.exports = {
           .map((field) => {
             let input = {
               key: field.key,
-              label: (field.label || field.key || "")
-                .toLowerCase()
-                .split(" ")
-                .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
-                .join(" "),
             };
+            let label = "";
+            switch (field.key) {
+              case "_grinderyUseCustomAbi":
+                input.label = "Set ABI manually";
+                break;
+              case "_grinderyAbi":
+                input.label = "Custom ABI";
+                break;
+              case "_grinderyEvent":
+                input.label = "Smart Contract Event";
+                break;
+              case "_grinderyFunction":
+                input.label = "Smart Contract Function";
+                break;
+              default:
+                input.label = (field.label || field.key || "")
+                  .toLowerCase()
+                  .split(" ")
+                  .map(
+                    (word) => word.charAt(0).toUpperCase() + word.substring(1)
+                  )
+                  .join(" ");
+            }
             let type = "";
             switch (field.type) {
               case "boolean":
@@ -172,6 +190,31 @@ module.exports = {
                 input.default = field.default;
               }
             }
+            if (field.helpText) {
+              input.helpText = field.helpText;
+            } else {
+              switch (field.key) {
+                case "_grinderyUseCustomAbi":
+                  input.helpText =
+                    "If set to FALSE Grindery will try to get the ABI automatically ABI. If set to TRUE you can set the ABI yourself manually.";
+                  break;
+                case "_grinderyAbi":
+                  input.helpText =
+                    "Paste the contract ABI. This can be obtained either in [Remix](https://docs.moonbeam.network/builders/build/eth-api/dev-env/remix/) or in the .json file generally created after the compilation process (for example, in Truffle or HardHat).";
+                  break;
+                case "_grinderyEvent":
+                  input.helpText =
+                    "Select the smart contract event you want to use as a trigger. Next you will be able to set the parameters.";
+                  break;
+                case "_grinderyFunction":
+                  input.helpText =
+                    "Select the smart contract function you want to use as an action. Next you will be able to set the parameters.";
+                  break;
+                default:
+                  input.helpText = "";
+              }
+            }
+
             input.altersDynamicFields = true;
             return input;
           })) ||

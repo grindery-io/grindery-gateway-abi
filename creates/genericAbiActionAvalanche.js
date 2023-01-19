@@ -60,7 +60,9 @@ module.exports = {
       {
         key: "_grinderyContractAddress",
         type: "string",
-        label: "Smart-contract address",
+        label: "Smart Contract Address",
+        helpText:
+          "Indicate the address of the smart contract you want to interact with. Make sure the address matches the block chain you selected.",
         required: true,
         altersDynamicFields: true,
       },
