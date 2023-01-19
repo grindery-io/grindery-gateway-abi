@@ -15,7 +15,6 @@ const workflowSource = {
 
 // triggers on a new genericAbiTrigger
 const perform = async (z, bundle) => {
-  z.console.log("genericAbiTrigger perform log", bundle.cleanedRequest);
   const payload = {
     ...bundle.cleanedRequest,
   };
@@ -25,7 +24,12 @@ const perform = async (z, bundle) => {
 
 //This method retrieves sample documents from Grindery Drivers
 const performTransactionList = async (z, bundle) => {
-  const data = await getOutputFields(z, bundle, "genericAbiTrigger");
+  const data = await getOutputFields(
+    z,
+    bundle,
+    "genericAbiTrigger",
+    "eip155:42220"
+  );
 
   if (data.length === 0) {
     return [];
@@ -34,7 +38,7 @@ const performTransactionList = async (z, bundle) => {
     data.map((field) => {
       obj = {
         ...obj,
-        [field.key]: "",
+        [field.key]: "Sample value",
       };
     });
     return [obj];
@@ -63,11 +67,13 @@ const subscribeHook = async (z, bundle) => {
       const outputFields = await getOutputFields(
         z,
         bundle,
-        "genericAbiTrigger"
+        "genericAbiTrigger",
+        "eip155:42220"
       );
 
       // trigger input object
       let input = {
+        _grinderyChain: "eip155:42220",
         ...bundle.inputData,
       };
 
@@ -183,13 +189,12 @@ const unsubscribeHook = async (z, bundle) => {
 module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
-  key: "genericAbiTrigger",
-  noun: "Smart-Contract Event",
+  key: "genericAbiTriggerCelo",
+  noun: "Smart-Contract Event on Celo chain",
 
   display: {
-    label: "Smart-Contract Event",
-    description: "Triggers when smart-contract event detected",
-    hidden: true,
+    label: "Smart-Contract Event on Celo chain",
+    description: "Triggers when smart-contract event detected on Celo chain",
   },
 
   operation: {
@@ -202,16 +207,19 @@ module.exports = {
     // Zapier will pass them in as `bundle.inputData` later. They're optional.
     inputFields: [
       {
-        key: "_grinderyChain",
+        key: "_grinderyContractAddress",
         type: "string",
-        label: "Blockchain",
-        placeholder: "Select a blockchain",
+        label: "Smart-contract address",
         required: true,
         altersDynamicFields: true,
-        dynamic: "list_chains_trigger.key",
       },
       async (z, bundle) => {
-        return await getInputFields(z, bundle, "genericAbiTrigger");
+        return await getInputFields(
+          z,
+          bundle,
+          "genericAbiTrigger",
+          "eip155:42220"
+        );
       },
     ],
 
@@ -228,9 +236,14 @@ module.exports = {
       // these are placeholders to match the example `perform` above
       // {key: 'id', label: 'Person ID'},
       // {key: 'name', label: 'Person Name'}
-      /*async (z, bundle) => {
-        return await getOutputFields(z, bundle, "genericAbiTrigger");
-      },*/
+      async (z, bundle) => {
+        return await getOutputFields(
+          z,
+          bundle,
+          "genericAbiTrigger",
+          "eip155:42220"
+        );
+      },
     ],
   },
 };

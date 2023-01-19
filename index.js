@@ -1,10 +1,43 @@
+// Generic action
 const genericAbiAction = require("./creates/genericAbiAction");
+
+// Actions by chain
+const genericAbiActionArbitrum = require("./creates/genericAbiActionArbitrum");
+const genericAbiActionAvalanche = require("./creates/genericAbiActionAvalanche");
+const genericAbiActionBinance = require("./creates/genericAbiActionBinance");
+const genericAbiActionCelo = require("./creates/genericAbiActionCelo");
+const genericAbiActionCronos = require("./creates/genericAbiActionCronos");
+const genericAbiActionEthereum = require("./creates/genericAbiActionEthereum");
+const genericAbiActionFantom = require("./creates/genericAbiActionFantom");
+const genericAbiActionGnosis = require("./creates/genericAbiActionGnosis");
+const genericAbiActionGoerli = require("./creates/genericAbiActionGoerli");
+const genericAbiActionHarmony = require("./creates/genericAbiActionHarmony");
+const genericAbiActionPolygon = require("./creates/genericAbiActionPolygon");
+
+// Generic trigger
 const genericAbiTrigger = require("./triggers/genericAbiTrigger");
+
+// Triggers by chain
+const genericAbiTriggerArbitrum = require("./triggers/genericAbiTriggerArbitrum");
+const genericAbiTriggerAvalanche = require("./triggers/genericAbiTriggerAvalanche");
+const genericAbiTriggerBinance = require("./triggers/genericAbiTriggerBinance");
+const genericAbiTriggerCelo = require("./triggers/genericAbiTriggerCelo");
+const genericAbiTriggerCronos = require("./triggers/genericAbiTriggerCronos");
+const genericAbiTriggerEthereum = require("./triggers/genericAbiTriggerEthereum");
+const genericAbiTriggerFantom = require("./triggers/genericAbiTriggerFantom");
+const genericAbiTriggerGnosis = require("./triggers/genericAbiTriggerGnosis");
+const genericAbiTriggerGoerli = require("./triggers/genericAbiTriggerGoerli");
+const genericAbiTriggerHarmony = require("./triggers/genericAbiTriggerHarmony");
+const genericAbiTriggerPolygon = require("./triggers/genericAbiTriggerPolygon");
+
+// Authentication
 const {
   config: authentication,
   befores = [],
   afters = [],
 } = require("./authentication");
+
+// Chains list
 const listChains = require("./triggers/listChains");
 
 const App = {
@@ -27,6 +60,17 @@ const App = {
   triggers: {
     [listChains.key]: listChains,
     [genericAbiTrigger.key]: genericAbiTrigger,
+    [genericAbiTriggerArbitrum.key]: genericAbiTriggerArbitrum,
+    [genericAbiTriggerAvalanche.key]: genericAbiTriggerAvalanche,
+    [genericAbiTriggerBinance.key]: genericAbiTriggerBinance,
+    [genericAbiTriggerCelo.key]: genericAbiTriggerCelo,
+    [genericAbiTriggerCronos.key]: genericAbiTriggerCronos,
+    [genericAbiTriggerEthereum.key]: genericAbiTriggerEthereum,
+    [genericAbiTriggerFantom.key]: genericAbiTriggerFantom,
+    [genericAbiTriggerGnosis.key]: genericAbiTriggerGnosis,
+    [genericAbiTriggerGoerli.key]: genericAbiTriggerGoerli,
+    [genericAbiTriggerHarmony.key]: genericAbiTriggerHarmony,
+    [genericAbiTriggerPolygon.key]: genericAbiTriggerPolygon,
   },
 
   // If you want your searches to show up, you better include it here!
@@ -35,6 +79,17 @@ const App = {
   // If you want your creates to show up, you better include it here!
   creates: {
     [genericAbiAction.key]: genericAbiAction,
+    [genericAbiActionArbitrum.key]: genericAbiActionArbitrum,
+    [genericAbiActionAvalanche.key]: genericAbiActionAvalanche,
+    [genericAbiActionBinance.key]: genericAbiActionBinance,
+    [genericAbiActionCelo.key]: genericAbiActionCelo,
+    [genericAbiActionCronos.key]: genericAbiActionCronos,
+    [genericAbiActionEthereum.key]: genericAbiActionEthereum,
+    [genericAbiActionFantom.key]: genericAbiActionFantom,
+    [genericAbiActionGnosis.key]: genericAbiActionGnosis,
+    [genericAbiActionGoerli.key]: genericAbiActionGoerli,
+    [genericAbiActionHarmony.key]: genericAbiActionHarmony,
+    [genericAbiActionPolygon.key]: genericAbiActionPolygon,
   },
 };
 

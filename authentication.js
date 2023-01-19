@@ -55,7 +55,7 @@ const refreshAccessToken = (z, bundle) => {
 };
 
 // Copied from Connex
-const testAuth = (z, bundle) => {
+/*const testAuth = (z, bundle) => {
   // Normally you want to make a request to an endpoint that is either specifically designed to test auth, or one that
   // every user will have access to, such as an account or profile endpoint like /me.
   const client = new NexusClient();
@@ -83,6 +83,24 @@ const testAuth = (z, bundle) => {
     if (error.message === "Invalid access token") {
       throw new z.errors.RefreshAuthError();
     }
+  }
+};*/
+
+const testAuth = async (z, bundle) => {
+  const client = new NexusClient();
+  client.authenticate(`${bundle.authData.access_token}`);
+  let workflows;
+  try {
+    workflows = await client.listWorkflows();
+  } catch (error) {
+    throw new z.errors.RefreshAuthError();
+  }
+  const user = client.getUser();
+  if (user) {
+    // return user's wallet address is short format, e.g. 0x44Ab...f5c0
+    return { id: user.address_short };
+  } else {
+    throw new Error("The access token you supplied is not valid");
   }
 };
 

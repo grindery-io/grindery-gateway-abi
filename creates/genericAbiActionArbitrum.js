@@ -19,16 +19,23 @@ const perform = async (z, bundle) => {
   const input = bundle.inputData;
   let nexus_response;
   try {
-    nexus_response = await client.runAction(step, input, ENVIRONMENT);
+    nexus_response = await client.runAction(
+      step,
+      { _grinderyChain: "eip155:42161", ...input },
+      ENVIRONMENT
+    );
   } catch (error) {
     if (error.message === "Invalid access token") {
       throw new z.errors.RefreshAuthError();
     } else {
-      z.console.log("perform genericAbiAction error", error);
+      z.console.log("perform genericAbiActionArbitrum error", error);
       throw new z.errors.Error(error.message);
     }
   }
-  z.console.log("Response from runAction (genericAbiAction): ", nexus_response);
+  z.console.log(
+    "Response from runAction (genericAbiActionArbitrum): ",
+    nexus_response
+  );
   if (nexus_response) {
     return nexus_response;
   }
@@ -37,13 +44,12 @@ const perform = async (z, bundle) => {
 module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
-  key: "genericAbiAction",
-  noun: "Smart-Contract Function",
+  key: "genericAbiActionArbitrum",
+  noun: "Smart-Contract Function on Arbitrum chain",
 
   display: {
-    label: "Smart-Contract Function",
-    description: "Sends transaction to the smart-contract.",
-    hidden: true,
+    label: "Smart-Contract Function on Arbitrum chain",
+    description: "Sends transaction to the smart-contract on Arbitrum chain.",
   },
 
   operation: {
@@ -52,16 +58,19 @@ module.exports = {
     // Zapier will pass them in as `bundle.inputData` later. They're optional.
     inputFields: [
       {
-        key: "_grinderyChain",
+        key: "_grinderyContractAddress",
         type: "string",
-        label: "Blockchain",
-        placeholder: "Select a blockchain",
+        label: "Smart-contract address",
         required: true,
         altersDynamicFields: true,
-        dynamic: "list_chains_trigger.key",
       },
       async (z, bundle) => {
-        return await getInputFields(z, bundle, "genericAbiAction");
+        return await getInputFields(
+          z,
+          bundle,
+          "genericAbiAction",
+          "eip155:42161"
+        );
       },
     ],
 
@@ -79,7 +88,12 @@ module.exports = {
       // {key: 'id', label: 'Person ID'},
       // {key: 'name', label: 'Person Name'}
       async (z, bundle) => {
-        return await getOutputFields(z, bundle, "genericAbiAction");
+        return await getOutputFields(
+          z,
+          bundle,
+          "genericAbiAction",
+          "eip155:42161"
+        );
       },
     ],
   },

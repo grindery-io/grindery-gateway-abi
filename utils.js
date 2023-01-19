@@ -26,7 +26,7 @@ module.exports = {
     }
     return s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4();
   },
-  getOutputFields: async (z, bundle, operation) => {
+  getOutputFields: async (z, bundle, operation, chain) => {
     const client = new NexusClient();
     client.authenticate(`${bundle.authData.access_token}`);
     let res;
@@ -40,7 +40,10 @@ module.exports = {
           id: new Date(),
           params: {
             key: operation,
-            fieldData: bundle.inputData,
+            fieldData: {
+              ...(chain ? { _grinderyChain: chain } : {}),
+              ...bundle.inputData,
+            },
             authentication: "",
           },
         },
@@ -69,7 +72,7 @@ module.exports = {
       []
     );
   },
-  getInputFields: async (z, bundle, operation) => {
+  getInputFields: async (z, bundle, operation, chain) => {
     const client = new NexusClient();
     client.authenticate(`${bundle.authData.access_token}`);
     let res;
@@ -83,7 +86,10 @@ module.exports = {
           id: new Date(),
           params: {
             key: operation,
-            fieldData: bundle.inputData,
+            fieldData: {
+              ...(chain ? { _grinderyChain: chain } : {}),
+              ...bundle.inputData,
+            },
             authentication: "",
           },
         },
@@ -110,6 +116,10 @@ module.exports = {
         res.inputFields
           .filter(
             (field) => field && field.key && field.key !== "_grinderyChain"
+          )
+          .filter(
+            (field) =>
+              !chain || (chain && field.key !== "_grinderyContractAddress")
           )
           .map((field) => {
             let input = {
