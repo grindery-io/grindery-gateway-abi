@@ -40,6 +40,7 @@ module.exports = {
   display: {
     label: chainName,
     description: `Triggers when a smart contract event is detected on the ${chainName} Blockchain.`,
+    important: true,
   },
 
   operation: {

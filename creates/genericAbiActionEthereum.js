@@ -22,6 +22,7 @@ module.exports = {
   display: {
     label: chainName,
     description: `Calls a smart-contract function on the ${chainName} Blockchain.`,
+    important: true,
   },
 
   operation: {
