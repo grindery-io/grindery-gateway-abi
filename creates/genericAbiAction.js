@@ -69,7 +69,7 @@ module.exports = {
     // from the API, Zapier will fallback to this hard-coded sample. It should reflect the data structure of
     // returned records, and have obvious placeholder values that we can show to any user.
     sample: {
-      _grinderyChain: chain,
+      _grinderyChain: "eip155:1",
     },
 
     // If fields are custom to each user (like spreadsheet columns), `outputFields` can create human labels
