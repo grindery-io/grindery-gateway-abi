@@ -1,7 +1,7 @@
 {
   "name": "grindery-gateway-abi",
   "version": "1.0.0",
-  "description": "Grindery EVM ABI",
+  "description": "Grindery Gateway ABI",
   "repository": "grindery-io/grindery-gateway-abi",
   "homepage": "https://www.grindery.io/",
   "author": "Egor Miliukov <milukove@gmail.com>",
