@@ -5,6 +5,7 @@ const genericAbiAction = require("./creates/genericAbiAction");
 const genericAbiActionArbitrum = require("./creates/genericAbiActionArbitrum");
 const genericAbiActionAvalanche = require("./creates/genericAbiActionAvalanche");
 const genericAbiActionBinance = require("./creates/genericAbiActionBinance");
+const genericAbiActionBSCTestnet = require("./creates/genericAbiActionBSCTestnet");
 const genericAbiActionCelo = require("./creates/genericAbiActionCelo");
 const genericAbiActionCronos = require("./creates/genericAbiActionCronos");
 const genericAbiActionEthereum = require("./creates/genericAbiActionEthereum");
@@ -21,6 +22,7 @@ const genericAbiTrigger = require("./triggers/genericAbiTrigger");
 const genericAbiTriggerArbitrum = require("./triggers/genericAbiTriggerArbitrum");
 const genericAbiTriggerAvalanche = require("./triggers/genericAbiTriggerAvalanche");
 const genericAbiTriggerBinance = require("./triggers/genericAbiTriggerBinance");
+const genericAbiTriggerBSCTestnet = require("./triggers/genericAbiTriggerBSCTestnet");
 const genericAbiTriggerCelo = require("./triggers/genericAbiTriggerCelo");
 const genericAbiTriggerCronos = require("./triggers/genericAbiTriggerCronos");
 const genericAbiTriggerEthereum = require("./triggers/genericAbiTriggerEthereum");
@@ -63,6 +65,7 @@ const App = {
     [genericAbiTriggerArbitrum.key]: genericAbiTriggerArbitrum,
     [genericAbiTriggerAvalanche.key]: genericAbiTriggerAvalanche,
     [genericAbiTriggerBinance.key]: genericAbiTriggerBinance,
+    [genericAbiTriggerBSCTestnet.key]: genericAbiTriggerBSCTestnet,
     [genericAbiTriggerCelo.key]: genericAbiTriggerCelo,
     [genericAbiTriggerCronos.key]: genericAbiTriggerCronos,
     [genericAbiTriggerEthereum.key]: genericAbiTriggerEthereum,
@@ -82,6 +85,7 @@ const App = {
     [genericAbiActionArbitrum.key]: genericAbiActionArbitrum,
     [genericAbiActionAvalanche.key]: genericAbiActionAvalanche,
     [genericAbiActionBinance.key]: genericAbiActionBinance,
+    [genericAbiActionBSCTestnet.key]: genericAbiActionBSCTestnet,
     [genericAbiActionCelo.key]: genericAbiActionCelo,
     [genericAbiActionCronos.key]: genericAbiActionCronos,
     [genericAbiActionEthereum.key]: genericAbiActionEthereum,
