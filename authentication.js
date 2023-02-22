@@ -87,15 +87,14 @@ const refreshAccessToken = (z, bundle) => {
 };*/
 
 const testAuth = async (z, bundle) => {
-  const client = new NexusClient();
-  client.authenticate(`${bundle.authData.access_token}`);
+  const client = new NexusClient(bundle.authData.access_token);
   let workflows;
   try {
-    workflows = await client.listWorkflows();
+    workflows = await client.workflow.list({});
   } catch (error) {
     throw new z.errors.RefreshAuthError();
   }
-  const user = client.getUser();
+  const user = client.user.get();
   if (user) {
     // return user's wallet address is short format, e.g. 0x44Ab...f5c0
     return { id: user.address_short };

@@ -57,8 +57,7 @@ const subscribeHook = async (z, bundle) => {
   return z.request(options).then(async (response) => {
     // create workflow
     try {
-      const client = new NexusClient();
-      client.authenticate(`${bundle.authData.access_token}`);
+      const client = new NexusClient(bundle.authData.access_token);
 
       const outputFields = await getOutputFields(
         z,
@@ -115,7 +114,9 @@ const subscribeHook = async (z, bundle) => {
         source: workflowSource[ENVIRONMENT] || workflowSource[0],
       };
 
-      const create_workflow_response = await client.createWorkflow(workflow);
+      const create_workflow_response = await client.workflow.create({
+        workflow,
+      });
       const data = await z.JSON.parse(response.content);
       const response_object = {
         workflow_key: create_workflow_response.key,

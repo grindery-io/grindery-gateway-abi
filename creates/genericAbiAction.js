@@ -4,13 +4,8 @@ const { getOutputFields, getInputFields } = require("../utils");
 const ENVIRONMENT = process.env.ENVIRONMENT;
 
 const perform = async (z, bundle) => {
-  const client = new NexusClient();
+  const client = new NexusClient(bundle.authData.access_token);
 
-  try {
-    client.authenticate(`${bundle.authData.access_token}`);
-  } catch (error) {
-    throw new z.errors.Error(error.message);
-  }
   const step = {
     type: "action",
     connector: "evmGenericAbi",
@@ -19,7 +14,11 @@ const perform = async (z, bundle) => {
   const input = bundle.inputData;
   let nexus_response;
   try {
-    nexus_response = await client.runAction(step, input, ENVIRONMENT);
+    nexus_response = await client.connector.runAction({
+      step,
+      input,
+      environment: ENVIRONMENT,
+    });
   } catch (error) {
     if (error.message === "Invalid access token") {
       throw new z.errors.RefreshAuthError();

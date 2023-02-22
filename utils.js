@@ -19,9 +19,8 @@ const contractField = {
 
 const getCreatorId = (token) => {
   try {
-    const client = new NexusClient();
-    client.authenticate(token);
-    const user = client.getUser();
+    const client = new NexusClient(token);
+    const user = client.user.get();
     return user.id;
   } catch (error) {
     //force token refresh if invalid
@@ -43,14 +42,13 @@ const uniqueID = () => {
 };
 
 const getOutputFields = async (z, bundle, operation, chain) => {
-  const client = new NexusClient();
-  client.authenticate(`${bundle.authData.access_token}`);
+  const client = new NexusClient(bundle.authData.access_token);
   let res;
   try {
-    res = await client.callInputProvider(
-      "evmGenericAbi",
-      operation,
-      {
+    res = await client.connector.callInputProvider({
+      connectorKey: "evmGenericAbi",
+      operationKey: operation,
+      body: {
         jsonrpc: "2.0",
         method: "grinderyNexusConnectorUpdateFields",
         id: new Date(),
@@ -63,8 +61,8 @@ const getOutputFields = async (z, bundle, operation, chain) => {
           authentication: "",
         },
       },
-      ENVIRONMENT
-    );
+      environment: ENVIRONMENT,
+    });
   } catch (error) {
     if (error.message === "Invalid access token") {
       throw new z.errors.RefreshAuthError();
@@ -79,25 +77,21 @@ const getOutputFields = async (z, bundle, operation, chain) => {
       res.outputFields &&
       res.outputFields.map((field) => ({
         key: field.key,
-        label: (field.label || field.key || "")
-          .toLowerCase()
-          .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
-          .join(" "),
+        label: field.label || field.key || "",
+        sample: (res.sample && res.sample[field.key]) || "Sample value",
       }))) ||
     []
   );
 };
 
 const getInputFields = async (z, bundle, operation, chain) => {
-  const client = new NexusClient();
-  client.authenticate(`${bundle.authData.access_token}`);
+  const client = new NexusClient(bundle.authData.access_token);
   let res;
   try {
-    res = await client.callInputProvider(
-      "evmGenericAbi",
-      operation,
-      {
+    res = await client.connector.callInputProvider({
+      connectorKey: "evmGenericAbi",
+      operationKey: operation,
+      body: {
         jsonrpc: "2.0",
         method: "grinderyNexusConnectorUpdateFields",
         id: new Date(),
@@ -110,8 +104,8 @@ const getInputFields = async (z, bundle, operation, chain) => {
           authentication: "",
         },
       },
-      ENVIRONMENT
-    );
+      environment: ENVIRONMENT,
+    });
   } catch (error) {
     if (error.message === "Invalid access token") {
       throw new z.errors.RefreshAuthError();
@@ -250,9 +244,11 @@ const subscribeHook = async (z, bundle, chain) => {
   return z.request(options).then(async (response) => {
     // create workflow
     try {
-      const client = new NexusClient();
-      client.authenticate(`${bundle.authData.access_token}`);
-      const chains = await client.listChains("evm", ENVIRONMENT);
+      const client = new NexusClient(bundle.authData.access_token);
+      const chains = await client.chain.list({
+        type: "evm",
+        environment: ENVIRONMENT,
+      });
 
       const outputFields = await getOutputFields(
         z,
@@ -314,7 +310,9 @@ const subscribeHook = async (z, bundle, chain) => {
         source: workflowSource[ENVIRONMENT] || workflowSource[0],
       };
 
-      const create_workflow_response = await client.createWorkflow(workflow);
+      const create_workflow_response = await client.workflow.create({
+        workflow,
+      });
       const data = await z.JSON.parse(response.content);
       const response_object = {
         workflow_key: create_workflow_response.key,
@@ -389,7 +387,7 @@ const performTransactionList = async (z, bundle, chain) => {
     data.map((field) => {
       obj = {
         ...obj,
-        [field.key]: "Sample value",
+        [field.key]: field.sample || "Sample value",
       };
     });
     return [obj];
@@ -397,13 +395,8 @@ const performTransactionList = async (z, bundle, chain) => {
 };
 
 const performAction = async (z, bundle, chain) => {
-  const client = new NexusClient();
+  const client = new NexusClient(bundle.authData.access_token);
 
-  try {
-    client.authenticate(`${bundle.authData.access_token}`);
-  } catch (error) {
-    throw new z.errors.Error(error.message);
-  }
   const step = {
     type: "action",
     connector: "evmGenericAbi",
@@ -412,11 +405,11 @@ const performAction = async (z, bundle, chain) => {
   const input = bundle.inputData;
   let nexus_response;
   try {
-    nexus_response = await client.runAction(
+    nexus_response = await client.connector.runAction({
       step,
-      { _grinderyChain: chain, ...input },
-      ENVIRONMENT
-    );
+      input: { _grinderyChain: chain, ...input },
+      environment: ENVIRONMENT,
+    });
   } catch (error) {
     if (error.message === "Invalid access token") {
       throw new z.errors.RefreshAuthError();

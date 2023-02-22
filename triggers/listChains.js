@@ -5,7 +5,10 @@ const ENVIRONMENT = process.env.ENVIRONMENT;
 const perform = async (z, bundle) => {
   const client = new NexusClient();
   try {
-    let chains = await client.listChains("evm", ENVIRONMENT);
+    let chains = await client.chain.list({
+      type: "evm",
+      environment: ENVIRONMENT,
+    });
     // this should return an array of objects
 
     if (chains) {
