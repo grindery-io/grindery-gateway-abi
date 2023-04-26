@@ -465,10 +465,11 @@ const performResumeAction = async (z, bundle) => {
     bundle.cleanedRequest
   );
   if (
-    bundle.cleanedRequest.content.success &&
-    bundle.cleanedRequest.content.result
+    bundle.cleanedRequest &&
+    bundle.cleanedRequest.success &&
+    bundle.cleanedRequest.result
   ) {
-    return bundle.cleanedRequest.content.result;
+    return bundle.cleanedRequest.result;
   } else {
     return {};
   }
