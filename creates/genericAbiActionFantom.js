@@ -1,8 +1,9 @@
 const {
   getOutputFields,
   getInputFields,
-  performAction,
   contractField,
+  performAsyncAction,
+  performResumeAction,
 } = require("../utils");
 
 const actionKey = "genericAbiActionFantom";
@@ -10,7 +11,7 @@ const chain = "eip155:250";
 const chainName = "Fantom";
 
 const perform = async (z, bundle) => {
-  return await performAction(z, bundle, chain);
+  return await performAsyncAction(z, bundle, chain);
 };
 
 module.exports = {
@@ -26,6 +27,7 @@ module.exports = {
 
   operation: {
     perform: perform,
+    performResume: performResumeAction,
     // `inputFields` defines the fields a user could provide
     // Zapier will pass them in as `bundle.inputData` later. They're optional.
     inputFields: [

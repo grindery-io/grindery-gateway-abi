@@ -424,6 +424,56 @@ const performAction = async (z, bundle, chain) => {
   }
 };
 
+const performAsyncAction = async (z, bundle, chain) => {
+  const client = new NexusClient(bundle.authData.access_token);
+
+  const step = {
+    type: "action",
+    connector: "evmGenericAbi",
+    operation: "genericAbiAction",
+  };
+  const input = bundle.inputData;
+  const callbackUrl = z.generateCallbackUrl();
+  let nexus_response;
+  try {
+    nexus_response = await client.connector.runActionAsync({
+      callbackUrl,
+      step,
+      input: { _grinderyChain: chain, ...input },
+      environment: ENVIRONMENT,
+    });
+  } catch (error) {
+    if (error.message === "Invalid access token") {
+      throw new z.errors.RefreshAuthError();
+    } else {
+      z.console.log("perform performAsyncAction error", error);
+      throw new z.errors.Error(error.message);
+    }
+  }
+  z.console.log(
+    "Response from runActionAsync (performAsyncAction): ",
+    nexus_response
+  );
+  if (nexus_response) {
+    return nexus_response;
+  }
+};
+
+const performResumeAction = async (z, bundle) => {
+  z.console.log(
+    "Response from runActionAsync callback (genericAbiAction): ",
+    bundle.cleanedRequest
+  );
+  if (
+    bundle.cleanedRequest.content.success &&
+    bundle.cleanedRequest.content.result
+  ) {
+    return bundle.cleanedRequest.content.result;
+  } else {
+    return {};
+  }
+};
+
 module.exports = {
   contractField,
   getCreatorId,
@@ -434,4 +484,6 @@ module.exports = {
   unsubscribeHook,
   performTransactionList,
   performAction,
+  performAsyncAction,
+  performResumeAction,
 };
