@@ -433,23 +433,43 @@ const performAsyncAction = async (z, bundle, chain) => {
     operation: "genericAbiAction",
   };
   const input = bundle.inputData;
-  const callbackUrl = z.generateCallbackUrl();
+
   let nexus_response;
-  try {
-    nexus_response = await client.connector.runActionAsync({
-      callbackUrl,
-      step,
-      input: { _grinderyChain: chain, ...input },
-      environment: ENVIRONMENT,
-    });
-  } catch (error) {
-    if (error.message === "Invalid access token") {
-      throw new z.errors.RefreshAuthError();
-    } else {
-      z.console.log("perform performAsyncAction error", error);
-      throw new z.errors.Error(error.message);
+  if (bundle.meta.isLoadingSample) {
+    try {
+      nexus_response = await client.connector.testAction({
+        step,
+        input: { _grinderyChain: chain, ...input },
+        environment: ENVIRONMENT,
+      });
+    } catch (error) {
+      if (error.message === "Invalid access token") {
+        throw new z.errors.RefreshAuthError();
+      } else {
+        z.console.log("perform performAsyncAction error", error);
+        throw new z.errors.Error(error.message);
+      }
+    }
+  } else {
+    const callbackUrl = z.generateCallbackUrl();
+
+    try {
+      nexus_response = await client.connector.runActionAsync({
+        callbackUrl,
+        step,
+        input: { _grinderyChain: chain, ...input },
+        environment: ENVIRONMENT,
+      });
+    } catch (error) {
+      if (error.message === "Invalid access token") {
+        throw new z.errors.RefreshAuthError();
+      } else {
+        z.console.log("perform performAsyncAction error", error);
+        throw new z.errors.Error(error.message);
+      }
     }
   }
+
   z.console.log(
     "Response from runActionAsync (performAsyncAction): ",
     nexus_response
