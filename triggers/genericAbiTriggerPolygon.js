@@ -5,6 +5,7 @@ const {
   unsubscribeHook,
   performTransactionList,
   contractField,
+  getNoun,
 } = require("../utils");
 
 const triggerKey = "genericAbiTriggerPolygon";
@@ -31,11 +32,13 @@ const performUnsubscribe = async (z, bundle) => {
   return await unsubscribeHook(z, bundle);
 };
 
+const noun = getNoun(chainName, "trigger");
+
 module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: triggerKey,
-  noun: chainName,
+  noun: noun,
 
   display: {
     label: chainName,

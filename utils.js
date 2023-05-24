@@ -495,6 +495,16 @@ const performResumeAction = async (z, bundle) => {
   }
 };
 
+const getNoun = (chainName, type) => {
+  if (type === "trigger") {
+    return `Event on ${chainName} blockchain`;
+  }
+  if (type === "action") {
+    return `Transaction on ${chainName} blockchain`;
+  }
+  return chainName;
+};
+
 module.exports = {
   contractField,
   getCreatorId,
@@ -507,4 +517,5 @@ module.exports = {
   performAction,
   performAsyncAction,
   performResumeAction,
+  getNoun,
 };

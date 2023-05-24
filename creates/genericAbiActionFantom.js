@@ -4,6 +4,7 @@ const {
   contractField,
   performAsyncAction,
   performResumeAction,
+  getNoun,
 } = require("../utils");
 
 const actionKey = "genericAbiActionFantom";
@@ -14,11 +15,13 @@ const perform = async (z, bundle) => {
   return await performAsyncAction(z, bundle, chain);
 };
 
+const noun = getNoun(chainName, "action");
+
 module.exports = {
   // see here for a full list of available properties:
   // https://github.com/zapier/zapier-platform/blob/master/packages/schema/docs/build/schema.md#triggerschema
   key: actionKey,
-  noun: chainName,
+  noun: noun,
 
   display: {
     label: chainName,
