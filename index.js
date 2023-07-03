@@ -33,6 +33,7 @@ const genericAbiTriggerGnosis = require("./triggers/genericAbiTriggerGnosis");
 const genericAbiTriggerGoerli = require("./triggers/genericAbiTriggerGoerli");
 const genericAbiTriggerHarmony = require("./triggers/genericAbiTriggerHarmony");
 const genericAbiTriggerPolygon = require("./triggers/genericAbiTriggerPolygon");
+const genericAbiTriggerMumbaiTestnet = require("./triggers/genericAbiTriggerMumbaiTestnet");
 
 // Authentication
 const {
@@ -77,6 +78,7 @@ const App = {
     [genericAbiTriggerGoerli.key]: genericAbiTriggerGoerli,
     [genericAbiTriggerHarmony.key]: genericAbiTriggerHarmony,
     [genericAbiTriggerPolygon.key]: genericAbiTriggerPolygon,
+    [genericAbiTriggerMumbaiTestnet.key]: genericAbiTriggerMumbaiTestnet,
   },
 
   // If you want your searches to show up, you better include it here!
