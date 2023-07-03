@@ -8,9 +8,9 @@ const {
   getNoun,
 } = require("../utils");
 
-const triggerKey = "genericAbiTriggerPolygonMumbai";
+const triggerKey = "genericAbiTriggerMumbaiTestnet";
 const chain = "eip155:80001";
-const chainName = "PolygonMumbai";
+const chainName = "Mumbai Testnet";
 
 const perform = async (z, bundle) => {
   const payload = {
