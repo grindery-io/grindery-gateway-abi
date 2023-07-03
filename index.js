@@ -15,6 +15,7 @@ const genericAbiActionGnosis = require("./creates/genericAbiActionGnosis");
 const genericAbiActionGoerli = require("./creates/genericAbiActionGoerli");
 const genericAbiActionHarmony = require("./creates/genericAbiActionHarmony");
 const genericAbiActionPolygon = require("./creates/genericAbiActionPolygon");
+const genericAbiActionMumbaiTestnet = require("./creates/genericAbiActionMumbaiTestnet");
 
 // Generic trigger
 const genericAbiTrigger = require("./triggers/genericAbiTrigger");
@@ -100,6 +101,7 @@ const App = {
     [genericAbiActionGoerli.key]: genericAbiActionGoerli,
     [genericAbiActionHarmony.key]: genericAbiActionHarmony,
     [genericAbiActionPolygon.key]: genericAbiActionPolygon,
+    [genericAbiActionMumbaiTestnet.key]: genericAbiActionMumbaiTestnet,
   },
 };
 
