@@ -491,7 +491,7 @@ const performResumeAction = async (z, bundle) => {
   ) {
     return bundle.cleanedRequest.result;
   } else {
-    return {};
+    throw new z.errors.Error(bundle.cleanedRequest.error || "Unknown error");
   }
 };
 
