@@ -409,6 +409,7 @@ const performAction = async (z, bundle, chain) => {
       step,
       input: { _grinderyChain: chain, ...input },
       environment: ENVIRONMENT,
+      source: workflowSource[ENVIRONMENT] || workflowSource[0],
     });
   } catch (error) {
     if (error.message === "Invalid access token") {
@@ -441,6 +442,7 @@ const performAsyncAction = async (z, bundle, chain) => {
         step,
         input: { _grinderyChain: chain, ...input },
         environment: ENVIRONMENT,
+        source: workflowSource[ENVIRONMENT] || workflowSource[0],
       });
     } catch (error) {
       if (error.message === "Invalid access token") {
@@ -518,4 +520,5 @@ module.exports = {
   performAsyncAction,
   performResumeAction,
   getNoun,
+  workflowSource,
 };

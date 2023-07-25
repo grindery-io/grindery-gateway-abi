@@ -1,5 +1,5 @@
 const NexusClient = require("grindery-nexus-client").default;
-const { getOutputFields, getInputFields } = require("../utils");
+const { getOutputFields, getInputFields, workflowSource } = require("../utils");
 
 const ENVIRONMENT = process.env.ENVIRONMENT;
 
@@ -18,6 +18,7 @@ const perform = async (z, bundle) => {
       step,
       input,
       environment: ENVIRONMENT,
+      source: workflowSource[ENVIRONMENT] || workflowSource[0],
     });
   } catch (error) {
     if (error.message === "Invalid access token") {
